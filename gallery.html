@@ -28,26 +28,52 @@
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .gallery-item:hover {
             transform: scale(1.05);
         }
         .gallery-item img {
             width: 100%;
-            height: 100%;
+            height: 200px; /* Fixed height for images */
             object-fit: cover;
             display: block;
         }
     </style>
+    <script>
+        // Updated script to handle smooth scrolling for internal links and a more robust mobile menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
+            });
+        });
+    </script>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
     <header class="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <a href="index.html" class="text-xl font-bold text-primary-blue">
-                <a href="#" class="text-xl font-bold text-primary-blue">
-    <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10">
-</a>
+                <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10">
             </a>
             <nav class="hidden md:flex space-x-8">
                 <a href="index.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
@@ -58,8 +84,9 @@
                 <a href="index.html#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
 				<a href="donate.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Donate</a>
             </nav>
-            <button id="menu-button" class="md:hidden text-primary-blue text-2xl">
-                <i class="fas fa-bars"></i>
+            <button id="menu-button" class="md:hidden text-primary-blue text-2xl relative w-8 h-8">
+                <i id="menu-icon" class="fas fa-bars absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300"></i>
+                <i id="close-icon" class="fas fa-times absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 hidden"></i>
             </button>
             <div class="hidden md:flex space-x-4">
                 <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
@@ -78,9 +105,13 @@
                 <a href="gallery.html" class="text-accent-cyan transition duration-300 font-semibold">Gallery</a>
                 <a href="index.html#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
                 <a href="index.html#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
-                <div class="flex space-x-4 pt-2">
+                <a href="donate.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Donate</a>
+                <div class="flex space-x-4 pt-4">
                     <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
                     <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
                 </div>
             </nav>
@@ -96,30 +127,61 @@
                 <h2 class="text-4xl font-bold text-primary-blue text-center mb-8">Graphic Design Portfolio</h2>
                 <div class="gallery-grid">
                     <div class="gallery-item">
-                        <img src="logo.jpg	" alt="Logo Design">
+                        <img src="logo.jpg" alt="Logo Design">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Custom Logo Design</h3>
+                            <p class="text-sm text-gray-600 mt-2">A professionally crafted logo that represents a brand's identity.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
                         <img src="poster.jpeg" alt="Poster Design">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Event Poster Design</h3>
+                            <p class="text-sm text-gray-600 mt-2">Eye-catching posters designed for events and promotions.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="businesscard.jpeg	" alt="Business Card Design">
+                        <img src="businesscard.jpeg" alt="Business Card Design">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Professional Business Cards</h3>
+                            <p class="text-sm text-gray-600 mt-2">Sleek and memorable business cards to make a lasting impression.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
                         <img src="socialmedia.jpeg" alt="Social Media Post">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Social Media Graphics</h3>
+                            <p class="text-sm text-gray-600 mt-2">Engaging visuals created for social media campaigns.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
-                        <img src=" bronchure.jpeg" alt="Brochure Design">
+                        <img src="bronchure.jpeg" alt="Brochure Design">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Informational Brochure</h3>
+                            <p class="text-sm text-gray-600 mt-2">Creative brochures to showcase products and services.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
                         <img src="vote.jpeg" alt="Invitation Card">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Custom Election Posters</h3>
+                            <p class="text-sm text-gray-600 mt-2">Elegant Election Posters for various Positions.</p>
+                        </div>
                     </div>
 					<div class="gallery-item">
-                        <img src="BD.jpeg" alt="Invitation Card">
+                        <img src="BD.jpeg" alt="Birthday Card">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Personalized Birthday Poster</h3>
+                            <p class="text-sm text-gray-600 mt-2">A unique birthday Poster design for a client.</p>
+                        </div>
                     </div>
 					<div class="gallery-item">
-                        <img src="match.jpeg" alt="Invitation Card">
+                        <img src="match.jpeg" alt="Sports Poster">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Sports Event Poster</h3>
+                            <p class="text-sm text-gray-600 mt-2">A dynamic poster to promote a local sports match.</p>
+                        </div>
                     </div>
-					
                 </div>
             </section>
 
@@ -128,27 +190,59 @@
                 <div class="gallery-grid">
                     <div class="gallery-item">
                         <img src="cctv.webp" alt="CCTV Installation">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">CCTV Surveillance Installation</h3>
+                            <p class="text-sm text-gray-600 mt-2">Professional setup of security camera systems for homes and businesses.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
                         <img src="network.avif" alt="Network Setup">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Office Network Setup</h3>
+                            <p class="text-sm text-gray-600 mt-2">Reliable and secure network configurations for a small office.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
                         <img src="pc.jpeg" alt="PC Repair">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Computer Repair & Maintenance</h3>
+                            <p class="text-sm text-gray-600 mt-2">Hardware and software repair to restore optimal computer performance.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
                         <img src="mobile.jpg" alt="Phone Repair">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Mobile Phone Repair</h3>
+                            <p class="text-sm text-gray-600 mt-2">Expert diagnosis and repair for a variety of mobile phone issues.</p>
+                        </div>
                     </div>
                     <div class="gallery-item">
                         <img src="data.webp" alt="Data Recovery">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Secure Data Recovery</h3>
+                            <p class="text-sm text-gray-600 mt-2">Recovery of lost or corrupted data from various storage devices.</p>
+                        </div>
                     </div>
 					<div class="gallery-item">
-                        <img src="app.avif" alt="Data Recovery">
+                        <img src="app.avif" alt="Application Design">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Mobile Application Development</h3>
+                            <p class="text-sm text-gray-600 mt-2">A showcase of a custom-built mobile application interface.</p>
+                        </div>
                     </div>
 					<div class="gallery-item">
-                        <img src="web.avif" alt="Data Recovery">
+                        <img src="web.avif" alt="Web Design">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Responsive Website Design</h3>
+                            <p class="text-sm text-gray-600 mt-2">A modern and clean website created for a business client.</p>
+                        </div>
                     </div>
 					<div class="gallery-item">
-                        <img src="software.jpg" alt="Data Recovery">
+                        <img src="software.jpg" alt="Software Installation">
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-primary-blue">Software Installation & Upgrade</h3>
+                            <p class="text-sm text-gray-600 mt-2">Ensuring software is properly installed and up-to-date for peak performance.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -178,7 +272,7 @@
                 <div>
                     <h4 class="text-xl font-bold mb-4">Contact Info</h4>
                     <p class="text-gray-300 mb-2"><i class="fas fa-phone-alt mr-2 text-accent-cyan"></i>+256 780 130 561</p>
-                    <p class="text-gray-300 mb-2"><i class="fas fa-envelope mr-2 text-accent-cyan"></i>ggrecotech&graphixsolutions@gmail.com</p>
+                    <p class="text-gray-300 mb-2"><i class="fas fa-envelope mr-2 text-accent-cyan"></i>grecotech&graphixsolutions@gmail.com</p>
                     <p class="text-gray-300 mb-4"><i class="fas fa-map-marker-alt mr-2 text-accent-cyan"></i>Buziga Kampala, Uganda</p>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
