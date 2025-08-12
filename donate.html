@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greco Tech and Grafix Solutions - Donate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #1a202c;
+        }
+        .text-primary-blue { color: #0A192F; }
+        .bg-primary-blue { background-color: #0A192F; }
+        .text-accent-cyan { color: #67E8F9; }
+        .bg-accent-cyan { background-color: #67E8F9; }
+        .scroll-mt-24 { scroll-margin-top: 6rem; }
+    </style>
+    <script>
+        // Simple script to handle smooth scrolling for internal links and mobile menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        });
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold text-primary-blue">
+                <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10">
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
+                <a href="index.html#tech-solutions" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Tech Solutions</a>
+                <a href="index.html#graphic-design" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Graphic Design</a>
+				<a href="gallery.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Gallery</a>
+                <a href="donate.html" class="text-accent-cyan transition duration-300 font-semibold">Donate</a>
+                <a href="index.html#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
+                <a href="index.html#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
+            </nav>
+            <button id="menu-button" class="md:hidden text-primary-blue text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="hidden md:flex space-x-4">
+                <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
+				<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
+				<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
+				<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
+                <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-inner pb-4">
+            <nav class="flex flex-col items-center space-y-4">
+                <a href="index.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
+                <a href="index.html#tech-solutions" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Tech Solutions</a>
+                <a href="index.html#graphic-design" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Graphic Design</a>
+                <a href="donate.html" class="text-accent-cyan transition duration-300 font-semibold">Donate</a>
+                <a href="index.html#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
+                <a href="index.html#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
+                <div class="flex space-x-4 pt-2">
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="mt-24 py-12">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-5xl font-bold text-primary-blue mb-4">Support Our Cause</h1>
+        <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Your generous donation helps us continue to provide high-quality tech and design services to our community. Every contribution, no matter the size, makes a difference.</p>
+
+        <div class="bg-white p-12 rounded-3xl shadow-lg max-w-2xl mx-auto">
+            <h3 class="text-3xl font-bold text-primary-blue mb-6">How to Donate via Mobile Money</h3>
+            <p class="text-lg text-gray-700 mb-6">You can easily send your donation to the following mobile money numbers. Please include your name and "donation" in the message.</p>
+            
+            <div class="space-y-6">
+                <div class="flex items-center justify-between bg-gray-100 p-4 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <img src="MoMo.jpg" alt="MTN Mobile Money Logo" class="h-10">
+                        <div>
+                            <p class="text-2xl font-semibold text-primary-blue">  +256 780 130 561</p>
+                            <p class="text-gray-600">MTN Mobile Money</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between bg-gray-100 p-4 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <img src="Airtel-Money-Logo.png" alt="Airtel-Money-Logo" class="h-10">
+                        <div>
+                            <p class="text-2xl font-semibold text-primary-blue">+256 751 005 482</p>
+                            <p class="text-gray-600">Airtel Money</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-sm text-gray-500 mt-8">Thanks For your Generosity😊.</p>
+        </div>
+    </div>
+</main>
+
+    <footer class="bg-primary-blue text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10 mb-4">
+                    <p class="text-gray-300 pr-8">Greco Tech and Grafix Solutions is your one-stop shop for reliable tech services and creative graphic design, helping you build a stronger presence.</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Home</a></li>
+                        <li><a href="index.html#tech-solutions" class="text-gray-300 hover:text-accent-cyan transition duration-300">Tech Solutions</a></li>
+                        <li><a href="index.html#graphic-design" class="text-gray-300 hover:text-accent-cyan transition duration-300">Graphic Design</a></li>
+                        <li><a href="gallery.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Gallery</a></li>
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-accent-cyan transition duration-300">About Us</a></li>
+                        <li><a href="index.html#contact" class="text-gray-300 hover:text-accent-cyan transition duration-300">Contact</a></li>
+						<li><a href="donate.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Donate</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Contact Info</h4>
+                    <p class="text-gray-300 mb-2"><i class="fas fa-phone-alt mr-2 text-accent-cyan"></i>+256 780 130 561</p>
+                    <p class="text-gray-300 mb-2"><i class="fas fa-envelope mr-2 text-accent-cyan"></i>grecotech&graphixsolutions@gmail.com</p>
+                    <p class="text-gray-300 mb-4"><i class="fas fa-map-marker-alt mr-2 text-accent-cyan"></i>Buziga Kampala, Uganda</p>
+                    <div class="flex space-x-4">
+                      <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
+						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
+						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
+						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2024 Greco Tech and Grafix Solutions. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
