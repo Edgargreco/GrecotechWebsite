@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greco Tech and Grafix Solutions</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -22,9 +19,25 @@
         .text-accent-cyan { color: #67E8F9; }
         .bg-accent-cyan { background-color: #67E8F9; }
         .scroll-mt-24 { scroll-margin-top: 6rem; }
+        
+        /* New CSS for Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
     </style>
     <script>
-        // Simple script to handle smooth scrolling for internal links
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('nav a[href^="#"]');
             navLinks.forEach(link => {
@@ -36,103 +49,112 @@
                 });
             });
 
-            // Toggle mobile menu
             const menuButton = document.getElementById('menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
             menuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
             });
+            
+            // New JavaScript for Scroll Animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-element');
+                        // Optional: Unobserve once animated to prevent re-triggering
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 }); // The animation will trigger when 10% of the element is visible
+
+            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach((element) => observer.observe(element));
         });
 	
-    // This script can be added to your existing script block
-    function toggleAnswer(button) {
-        const answer = button.nextElementSibling;
-        const icon = button.querySelector('span:last-child');
-        
-        answer.classList.toggle('hidden');
-        icon.classList.toggle('rotate-45');
-    }
-
+        function toggleAnswer(button) {
+            const answer = button.nextElementSibling;
+            const icon = button.querySelector('span:last-child');
+            
+            answer.classList.toggle('hidden');
+            icon.classList.toggle('rotate-45');
+        }
     </script>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Header -->
     <header class="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <!-- Logo -->
             <a href="#" class="text-xl font-bold text-primary-blue">
-    <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10">
-</a>
+                <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10">
+            </a>
 
-            <!-- Navigation Menu (Desktop) -->
-           <nav class="hidden md:flex space-x-8">
-    <a href="#home" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
-    <a href="#tech-solutions" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Tech Solutions</a>
-    <a href="#graphic-design" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Graphic Design</a>
-    <a href="gallery.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Gallery</a>
-    <a href="#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
-    <a href="#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
-	<a href="donate.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Donate</a>
-</nav>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
+                <a href="#tech-solutions" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Tech Solutions</a>
+                <a href="#graphic-design" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Graphic Design</a>
+                <a href="gallery.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Gallery</a>
+                <a href="#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
+                <a href="#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
+                <a href="donate.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Donate</a>
+            </nav>
 
-            <!-- Mobile Menu Button -->
-            <button id="menu-button" class="md:hidden text-primary-blue text-2xl">
-                <i class="fas fa-bars"></i>
+            <button id="menu-button" class="md:hidden text-primary-blue text-2xl relative w-8 h-8">
+                <i id="menu-icon" class="fas fa-bars absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300"></i>
+                <i id="close-icon" class="fas fa-times absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 hidden"></i>
             </button>
 
-            <!-- Social Media Icons (Desktop) -->
             <div class="hidden md:flex space-x-4">
                 <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
-				<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
-				<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
-				<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
+                <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
                 <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
 
-        <!-- Mobile Menu (Hidden by default) -->
-       <div id="mobile-menu" class="hidden md:hidden bg-white shadow-inner pb-4">
-    <nav class="flex flex-col items-center space-y-4">
-        <a href="#home" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
-        <a href="#tech-solutions" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Tech Solutions</a>
-        <a href="#graphic-design" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Graphic Design</a>
-        <a href="gallery.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Gallery</a>
-        <a href="#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
-        <a href="#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
-		<a href="donate.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Donate</a>
-        <div class="flex space-x-4 pt-2">
-            <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-inner pb-4">
+            <nav class="flex flex-col items-center space-y-4">
+                <a href="#home" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
+                <a href="#tech-solutions" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Tech Solutions</a>
+                <a href="#graphic-design" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Graphic Design</a>
+                <a href="gallery.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Gallery</a>
+                <a href="#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
+                <a href="#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
+                <a href="donate.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Donate</a>
+                <div class="flex space-x-4 pt-4">
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
+                    <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
+                </div>
+            </nav>
         </div>
-    </nav>
-</div>
     </header>
 
     <main class="mt-24">
 
-        <!-- Home Section -->
         <section id="home" class="relative text-white min-h-[70vh] flex items-center justify-center p-8 overflow-hidden bg-cover bg-center"
-            style="background-image: url('home.jpg">
-            <!-- Overlay to make text readable -->
+            style="background-image: url('home.jpg');">
             <div class="absolute inset-0 bg-primary-blue opacity-50"></div>
-            <!-- Dynamic swoosh background element -->
             <div class="absolute inset-0 transform -skew-y-3 scale-110 opacity-10" style="background-image: linear-gradient(to right, #67E8F9, #0A192F);"></div>
             <div class="container mx-auto text-center relative z-10 p-8 rounded-xl backdrop-blur-sm">
-                <h1 class="text-5xl md:text-6xl font-bold mb-4 leading-tight">Your One-Stop Solution for Tech and Graphics</h1>
-                <p class="text-xl md:text-2xl font-light mb-8">Delivering Better Tech and Grafix Services for All Kinds of Business</p>
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">Your One-Stop Solution for Tech and Graphics</h1>
+                <p class="text-lg md:text-2xl font-light mb-8">Delivering Better Tech and Grafix Services for All Kinds of Business</p>
                 <a href="#contact" class="bg-accent-cyan text-primary-blue font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">Get a Free Quote</a>
             </div>
         </section>
 
-        <!-- Services Overview Section -->
         <section class="py-20 bg-white" id="services-overview">
             <div class="container mx-auto px-4 text-center">
                 <div class="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
-                    <!-- Tech Solutions Card -->
-                    <div class="bg-gray-100 p-10 rounded-3xl shadow-lg transition duration-300 hover:shadow-2xl transform hover:-translate-y-2">
+                    <div class="bg-gray-100 p-10 rounded-3xl shadow-lg transition duration-300 hover:shadow-2xl transform hover:-translate-y-2 animate-on-scroll">
                         <div class="text-5xl text-accent-cyan mb-4">
                             <i class="fas fa-microchip"></i>
                         </div>
@@ -140,8 +162,7 @@
                         <p class="text-lg text-gray-600 mb-6">Expert services for all your IT and device needs. From repair to networking, we've got you covered.</p>
                         <a href="#tech-solutions" class="text-primary-blue font-semibold hover:text-accent-cyan transition duration-300">Learn More <i class="fas fa-arrow-right ml-2"></i></a>
                     </div>
-                    <!-- Graphic Design Card -->
-                    <div class="bg-gray-100 p-10 rounded-3xl shadow-lg transition duration-300 hover:shadow-2xl transform hover:-translate-y-2">
+                    <div class="bg-gray-100 p-10 rounded-3xl shadow-lg transition duration-300 hover:shadow-2xl transform hover:-translate-y-2 animate-on-scroll">
                         <div class="text-5xl text-accent-cyan mb-4">
                             <i class="fas fa-paint-brush"></i>
                         </div>
@@ -153,31 +174,26 @@
             </div>
         </section>
 
-        <!-- Why Choose Us? Section -->
         <section class="py-20 bg-gray-100">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="text-4xl font-bold text-primary-blue mb-12">Why Choose Us?</h2>
                 <div class="grid md:grid-cols-4 gap-8">
-                    <!-- Card 1 -->
-                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl">
+                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl animate-on-scroll">
                         <div class="text-4xl text-accent-cyan mb-4"><i class="fas fa-users-cog"></i></div>
                         <h3 class="text-xl font-semibold text-primary-blue mb-2">Expert Team</h3>
                         <p class="text-gray-600">Our professionals are highly skilled in both tech and creative fields.</p>
                     </div>
-                    <!-- Card 2 -->
-                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl">
+                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl animate-on-scroll">
                         <div class="text-4xl text-accent-cyan mb-4"><i class="fas fa-award"></i></div>
                         <h3 class="text-xl font-semibold text-primary-blue mb-2">Quality Service</h3>
                         <p class="text-gray-600">We are committed to delivering top-notch service and excellent results.</p>
                     </div>
-                    <!-- Card 3 -->
-                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl">
+                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl animate-on-scroll">
                         <div class="text-4xl text-accent-cyan mb-4"><i class="fas fa-smile"></i></div>
                         <h3 class="text-xl font-semibold text-primary-blue mb-2">Customer Satisfaction</h3>
                         <p class="text-gray-600">Your happiness is our priority. We work until you're completely satisfied.</p>
                     </div>
-                    <!-- Card 4 -->
-                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl">
+                    <div class="bg-white p-8 rounded-3xl shadow-md transition duration-300 hover:shadow-xl animate-on-scroll">
                         <div class="text-4xl text-accent-cyan mb-4"><i class="fas fa-hand-holding-usd"></i></div>
                         <h3 class="text-xl font-semibold text-primary-blue mb-2">Affordable Pricing</h3>
                         <p class="text-gray-600">Get premium services without breaking the bank. We offer competitive rates.</p>
@@ -186,15 +202,12 @@
             </div>
         </section>
 
-        <!-- Tech Solutions Page Section -->
         <section id="tech-solutions" class="py-20 scroll-mt-24">
             <div class="container mx-auto px-4">
-                <h2 class="text-5xl font-bold text-primary-blue text-center mb-4">Comprehensive Tech & IT Solutions</h2>
-                <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">We provide efficient and reliable tech solutions for both individuals and businesses, ensuring your devices and systems run smoothly.</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">Comprehensive Tech & IT Solutions</h2>
+                <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">We provide efficient and reliable tech solutions for both individuals and businesses, ensuring your devices and systems run smoothly.</p>
 
-                <!-- Services Grid -->
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Computer Services -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
                     <div class="bg-white p-8 rounded-3xl shadow-lg">
                         <h3 class="text-2xl font-bold text-primary-blue mb-4"><i class="fas fa-desktop text-accent-cyan mr-3"></i>Computer Services</h3>
                         <ul class="space-y-4 text-gray-700">
@@ -204,7 +217,6 @@
                             <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Data Recovery & Backup</li>
                         </ul>
                     </div>
-                    <!-- Mobile Phone Services -->
                     <div class="bg-white p-8 rounded-3xl shadow-lg">
                         <h3 class="text-2xl font-bold text-primary-blue mb-4"><i class="fas fa-mobile-alt text-accent-cyan mr-3"></i>Mobile Phone Services</h3>
                         <ul class="space-y-4 text-gray-700">
@@ -214,7 +226,6 @@
                             <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Unlocking & Network Services</li>
                         </ul>
                     </div>
-                    <!-- IT Solutions -->
                     <div class="bg-white p-8 rounded-3xl shadow-lg">
                         <h3 class="text-2xl font-bold text-primary-blue mb-4"><i class="fas fa-network-wired text-accent-cyan mr-3"></i>IT Solutions</h3>
                         <ul class="space-y-4 text-gray-700">
@@ -226,23 +237,19 @@
                     </div>
                 </div>
 
-                <!-- CTA Section -->
-                <div class="text-center mt-16">
+                <div class="text-center mt-16 animate-on-scroll">
                     <h3 class="text-3xl font-bold text-primary-blue mb-4">Facing a Tech Issue? Contact Our Experts Today.</h3>
                     <a href="#contact" class="bg-accent-cyan text-primary-blue font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">Get Help Now</a>
                 </div>
             </div>
         </section>
 
-        <!-- Graphic Design Page Section -->
         <section id="graphic-design" class="py-20 bg-gray-100 scroll-mt-24">
             <div class="container mx-auto px-4">
-                <h2 class="text-5xl font-bold text-primary-blue text-center mb-4">Creative Graphic Design Services to Build Your Brand</h2>
-                <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">We use the power of visual branding to help your business stand out with stunning, professional designs.</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">Creative Graphic Design Services to Build Your Brand</h2>
+                <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">We use the power of visual branding to help your business stand out with stunning, professional designs.</p>
 
-                <!-- Full Service Listing -->
-                <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Service Item -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-on-scroll">
                     <div class="flex items-center space-x-4 bg-white p-6 rounded-2xl shadow-sm transition duration-300 hover:shadow-lg">
                         <div class="text-2xl text-accent-cyan"><i class="fas fa-pen-nib"></i></div>
                         <span class="text-lg font-medium text-primary-blue">Logo Design</span>
@@ -297,20 +304,18 @@
                     </div>
                 </div>
 
-                <!-- CTA Section -->
-                <div class="text-center mt-16">
+                <div class="text-center mt-16 animate-on-scroll">
                     <h3 class="text-3xl font-bold text-primary-blue mb-4">Ready to Bring Your Vision to Life?</h3>
                     <a href="#contact" class="bg-accent-cyan text-primary-blue font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">Start Your Project</a>
                 </div>
             </div>
         </section>
 
-        <!-- About Us Section -->
         <section id="about" class="py-20 scroll-mt-24">
             <div class="container mx-auto px-4">
-                <h2 class="text-5xl font-bold text-primary-blue text-center mb-4">About Us</h2>
-                <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Greco Tech and Grafix Solutions is a leading provider of innovative technology and creative graphic design services. Based in Buziga Kampala, Uganda, we are passionate about helping businesses and individuals succeed by delivering high-quality, reliable, and affordable solutions.</p>
-                <div class="bg-white p-10 rounded-3xl shadow-lg max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">About Us</h2>
+                <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Greco Tech and Grafix Solutions is a leading provider of innovative technology and creative graphic design services. Based in Buziga Kampala, Uganda, we are passionate about helping businesses and individuals succeed by delivering high-quality, reliable, and affordable solutions.</p>
+                <div class="bg-white p-10 rounded-3xl shadow-lg max-w-4xl mx-auto animate-on-scroll">
                     <p class="text-lg leading-relaxed text-gray-700">Our mission is to be your trusted partner for all things tech and creative. We pride ourselves on our expert team, exceptional customer service, and a commitment to quality that shines through in every project we undertake. Whether you need a computer repaired, a new brand identity, or a stunning marketing brochure, we combine technical precision with creative flair to exceed your expectations. We look forward to working with you and turning your ideas into reality.</p>
                 </div>
             </div>
@@ -318,10 +323,10 @@
 
 <section id="faq" class="py-20">
     <div class="container mx-auto px-4">
-        <h2 class="text-5xl font-bold text-primary-blue text-center mb-4">Still Have Questions?</h2>
-        <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Find answers to the most common questions about our services.</p>
+        <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">Still Have Questions?</h2>
+        <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Find answers to the most common questions about our services.</p>
 
-        <div class="max-w-4xl mx-auto space-y-4">
+        <div class="max-w-4xl mx-auto space-y-4 animate-on-scroll">
 
             <h3 class="text-3xl font-bold text-primary-blue mt-8 mb-4">Tech Solutions FAQs</h3>
             <div class="bg-white p-6 rounded-2xl shadow-md transition duration-300 hover:shadow-lg">
@@ -380,17 +385,15 @@
                     <p>Absolutely. We offer services to design and create a consistent set of social media graphics for platforms like Facebook, Instagram, and Twitter. This can include posts, banners, profile pictures, and event covers to strengthen your online brand presence.</p>
                 </div>
             </div>
-
         </div>
     </div>
-
 </section>
 <section id="reviews" class="py-20 bg-gray-100 scroll-mt-24">
     <div class="container mx-auto px-4">
-        <h2 class="text-5xl font-bold text-primary-blue text-center mb-4">What Our Clients Say</h2>
-        <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Hear from our satisfied customers about their experience with us.</p>
+        <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">What Our Clients Say</h2>
+        <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Hear from our satisfied customers about their experience with us.</p>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto animate-on-scroll">
 
             <div class="bg-white p-8 rounded-3xl shadow-lg transition duration-300 hover:shadow-xl">
                 <div class="flex items-center mb-4">
@@ -437,102 +440,7 @@
         </div>
     </div>
 </section>
-        <!-- Contact Section -->
         <section id="contact" class="py-20 bg-gray-100 scroll-mt-24">
             <div class="container mx-auto px-4">
-                <h2 class="text-5xl font-bold text-primary-blue text-center mb-4">Get In Touch</h2>
-                <p class="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">We're here to help! Fill out the form below or contact us directly to discuss your needs.</p>
-                <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-                    <!-- Contact Info -->
-                    <div class="bg-white p-8 rounded-3xl shadow-lg">
-                        <h3 class="text-3xl font-bold text-primary-blue mb-6">Contact Information</h3>
-                        <div class="space-y-6 text-lg text-gray-700">
-                            <p class="flex items-center"><i class="fas fa-phone-alt text-accent-cyan mr-3"></i>+256 780 130 561 / +256 751 005 482</p>
-                            <p class="flex items-center"><i class="fas fa-envelope text-accent-cyan mr-3"></i>grecotech&graphixsolutions@gmail.com</p>
-                            <p class="flex items-start"><i class="fas fa-map-marker-alt text-accent-cyan mr-3 mt-1"></i>Buziga Kampala, Uganda</p>
-                        </div>
-                    </div>
-                    <!-- Contact Form -->
-                  <div class="bg-white p-8 rounded-3xl shadow-lg">
-    <h3 class="text-3xl font-bold text-primary-blue mb-6">Send Us a Message</h3>
-    <form action="https://formspree.io/f/xzzvoraw" method="POST" class="space-y-6">
-        <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-            <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-accent-cyan focus:ring-accent-cyan" placeholder="Your Name" required>
-        </div>
-        <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-accent-cyan focus:ring-accent-cyan" placeholder="you@example.com" required>
-        </div>
-        <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-            <input type="tel" id="phone" name="phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-accent-cyan focus:ring-accent-cyan" placeholder="e.g., +256 7..." required>
-        </div>
-        <div>
-            <label for="service" class="block text-sm font-medium text-gray-700">Service of Interest</label>
-            <select id="service" name="service" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-accent-cyan focus:ring-accent-cyan" required>
-                <option value="">-- Please select a service --</option>
-                <option value="tech-support">Tech Support</option>
-                <option value="graphic-design">Graphic Design</option>
-                <option value="it-solutions">IT Solutions</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-        <div>
-            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
-            <textarea id="message" name="message" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-accent-cyan focus:ring-accent-cyan" placeholder="Tell us about your project or issue." required></textarea>
-        </div>
-        <button type="submit" class="w-full bg-primary-blue text-white font-bold py-3 px-4 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">Submit</button>
-    </form>
-</div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-primary-blue text-white py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
-                <!-- About Blurb -->
-                <div class="col-span-2">
-                    <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10 mb-4">
-                    <p class="text-gray-300 pr-8">Greco Tech and Grafix Solutions is your one-stop shop for reliable tech services and creative graphic design, helping you build a stronger presence.</p>
-                </div>
-                <!-- Navigation -->
-                <div>
-                    <h4 class="text-xl font-bold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-300 hover:text-accent-cyan transition duration-300">Home</a></li>
-                        <li><a href="#tech-solutions" class="text-gray-300 hover:text-accent-cyan transition duration-300">Tech Solutions</a></li>
-                        <li><a href="#graphic-design" class="text-gray-300 hover:text-accent-cyan transition duration-300">Graphic Design</a></li>
-						<li><a href="gallery.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Gallery</a></li>
-                        <li><a href="#about" class="text-gray-300 hover:text-accent-cyan transition duration-300">About Us</a></li>
-                        <li><a href="#contact" class="text-gray-300 hover:text-accent-cyan transition duration-300">Contact</a></li>
-                    </ul>
-                </div>
-                <!-- Contact Info -->
-                <div>
-                    <h4 class="text-xl font-bold mb-4">Contact Info</h4>
-                    <p class="text-gray-300 mb-2"><i class="fas fa-phone-alt mr-2 text-accent-cyan"></i>+256 780 130 561</p>
-                    <p class="text-gray-300 mb-2"><i class="fas fa-envelope mr-2 text-accent-cyan"></i>grecoandgrahix.com</p>
-                    <p class="text-gray-300 mb-4"><i class="fas fa-map-marker-alt mr-2 text-accent-cyan"></i>Buziga Kampala, Uganda</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
-						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
-						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
-						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
-                <p>&copy; 2024 Greco Tech and Grafix Solutions. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-</body>
-</html>
+                <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">Get In Touch</h2>
+                <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-
