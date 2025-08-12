@@ -19,9 +19,25 @@
         .text-accent-cyan { color: #67E8F9; }
         .bg-accent-cyan { background-color: #67E8F9; }
         .scroll-mt-24 { scroll-margin-top: 6rem; }
+
+        /* New CSS for Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
     </style>
     <script>
-        // Simple script to handle smooth scrolling for internal links and mobile menu
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('nav a[href^="#"]');
             navLinks.forEach(link => {
@@ -35,9 +51,28 @@
 
             const menuButton = document.getElementById('menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
             menuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
             });
+            
+            // New JavaScript for Scroll Animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-element');
+                        // Optional: Unobserve once animated to prevent re-triggering
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 }); // The animation will trigger when 10% of the element is visible
+
+            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach((element) => observer.observe(element));
         });
     </script>
 </head>
@@ -57,8 +92,9 @@
                 <a href="index.html#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
                 <a href="index.html#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
             </nav>
-            <button id="menu-button" class="md:hidden text-primary-blue text-2xl">
-                <i class="fas fa-bars"></i>
+            <button id="menu-button" class="md:hidden text-primary-blue text-2xl relative w-8 h-8">
+                <i id="menu-icon" class="fas fa-bars absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300"></i>
+                <i id="close-icon" class="fas fa-times absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 hidden"></i>
             </button>
             <div class="hidden md:flex space-x-4">
                 <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
@@ -74,12 +110,16 @@
                 <a href="index.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Home</a>
                 <a href="index.html#tech-solutions" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Tech Solutions</a>
                 <a href="index.html#graphic-design" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Graphic Design</a>
+                <a href="gallery.html" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Gallery</a>
                 <a href="donate.html" class="text-accent-cyan transition duration-300 font-semibold">Donate</a>
                 <a href="index.html#about" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">About Us</a>
                 <a href="index.html#contact" class="text-primary-blue hover:text-accent-cyan transition duration-300 font-semibold">Contact</a>
-                <div class="flex space-x-4 pt-2">
+                <div class="flex space-x-4 pt-4">
                     <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
+					<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
+					<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
+					<a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
                     <a href="#" class="text-primary-blue hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
                 </div>
             </nav>
@@ -116,50 +156,3 @@
                     </div>
                 </div>
             </div>
-            
-            <p class="text-sm text-gray-500 mt-8">Thanks For your Generosity😊.</p>
-        </div>
-    </div>
-</main>
-
-    <footer class="bg-primary-blue text-white py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="col-span-2">
-                    <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10 mb-4">
-                    <p class="text-gray-300 pr-8">Greco Tech and Grafix Solutions is your one-stop shop for reliable tech services and creative graphic design, helping you build a stronger presence.</p>
-                </div>
-                <div>
-                    <h4 class="text-xl font-bold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="index.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Home</a></li>
-                        <li><a href="index.html#tech-solutions" class="text-gray-300 hover:text-accent-cyan transition duration-300">Tech Solutions</a></li>
-                        <li><a href="index.html#graphic-design" class="text-gray-300 hover:text-accent-cyan transition duration-300">Graphic Design</a></li>
-                        <li><a href="gallery.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Gallery</a></li>
-                        <li><a href="index.html#about" class="text-gray-300 hover:text-accent-cyan transition duration-300">About Us</a></li>
-                        <li><a href="index.html#contact" class="text-gray-300 hover:text-accent-cyan transition duration-300">Contact</a></li>
-						<li><a href="donate.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Donate</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-xl font-bold mb-4">Contact Info</h4>
-                    <p class="text-gray-300 mb-2"><i class="fas fa-phone-alt mr-2 text-accent-cyan"></i>+256 780 130 561</p>
-                    <p class="text-gray-300 mb-2"><i class="fas fa-envelope mr-2 text-accent-cyan"></i>grecotech&graphixsolutions@gmail.com</p>
-                    <p class="text-gray-300 mb-4"><i class="fas fa-map-marker-alt mr-2 text-accent-cyan"></i>Buziga Kampala, Uganda</p>
-                    <div class="flex space-x-4">
-                      <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
-						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
-						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-whatsapp"></i></a>
-						<a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-snapchat"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
-                <p>&copy; 2024 Greco Tech and Grafix Solutions. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
