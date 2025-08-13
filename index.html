@@ -82,6 +82,44 @@
             answer.classList.toggle('hidden');
             icon.classList.toggle('rotate-45');
         }
+		// Function to handle the counter animation
+function startCounterAnimation(entries, observer) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const counters = entry.target.querySelectorAll('[data-target]');
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const speed = 200; // The higher the number, the slower the animation
+                    const increment = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+            observer.unobserve(entry.target); // Stop observing after animation starts
+        }
+    });
+}
+
+// Create a new IntersectionObserver for the counter section
+const counterObserver = new IntersectionObserver(startCounterAnimation, {
+    threshold: 0.5 // Trigger when 50% of the section is visible
+});
+
+// Observe the counter section
+document.addEventListener('DOMContentLoaded', () => {
+    const counterSection = document.getElementById('counter');
+    if (counterSection) {
+        counterObserver.observe(counterSection);
+    }
+});
     </script>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -201,7 +239,28 @@
                 </div>
             </div>
         </section>
-
+		<section id="counter" class="py-20 bg-accent-cyan text-primary-blue">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-6xl mx-auto">
+            <div class="animate-on-scroll">
+                <div class="text-5xl font-bold mb-2" data-target="350">0</div>
+                <p class="text-xl font-semibold">Projects Completed</p>
+            </div>
+            <div class="animate-on-scroll">
+                <div class="text-5xl font-bold mb-2" data-target="15">0</div>
+                <p class="text-xl font-semibold">Expert Team Members</p>
+            </div>
+            <div class="animate-on-scroll">
+                <div class="text-5xl font-bold mb-2" data-target="99">0</div>
+                <p class="text-xl font-semibold">Client Satisfaction Rate %</p>
+            </div>
+            <div class="animate-on-scroll">
+                <div class="text-5xl font-bold mb-2" data-target="5">0</div>
+                <p class="text-xl font-semibold">Years of Experience</p>
+            </div>
+        </div>
+    </div>
+</section>
         <section id="tech-solutions" class="py-20 scroll-mt-24">
             <div class="container mx-auto px-4">
                 <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">Comprehensive Tech & IT Solutions</h2>
@@ -526,6 +585,8 @@
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
                 <p>&copy; 2024 Greco Tech and Grafix Solutions. All Rights Reserved.</p>
+				<div class="bg-gradient-to-r from-primary-blue to-accent-cyan text-white p-2 mt-4 rounded-lg inline-block">
+                <p class="text-sm font-semibold">ISO 9001:2015 Certified | NHBRC Registered</p>
             </div>
         </div>
     </footer>
