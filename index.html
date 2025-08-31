@@ -36,9 +36,56 @@
             transform: translateY(20px);
             animation: fadeIn 0.8s ease-out forwards;
         }
+		/* Team Carousel CSS */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            touch-action: pan-y; /* Allows vertical scrolling on touch devices */
+        }
+        .carousel-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousecarouse&l-item {
+            min-width: 100%;
+            flex-shrink: 0;
+        }
+        @media (min-width: 768px) {
+            .carousel-item {
+                min-width: 33.333333%;
+            }
+        }
+        @media (min-width: 1024px) {
+            .carousel-item {
+                min-width: 25%;
+            }
+        }
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(10, 25, 47, 0.7);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            z-index: 10;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+        .carousel-control:hover {
+            background-color: rgba(103, 232, 249, 0.7);
+            color: #0A192F;
+        }
+        .carousel-prev {
+            left: 1rem;
+        }
+        .carousel-next {
+            right: 1rem;
+        }
     </style>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('nav a[href^="#"]');
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -82,44 +129,179 @@
             answer.classList.toggle('hidden');
             icon.classList.toggle('rotate-45');
         }
-		// Function to handle the counter animation
-function startCounterAnimation(entries, observer) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const counters = entry.target.querySelectorAll('[data-target]');
-            counters.forEach(counter => {
-                const updateCount = () => {
-                    const target = +counter.getAttribute('data-target');
-                    const count = +counter.innerText;
-                    const speed = 200; // The higher the number, the slower the animation
-                    const increment = target / speed;
+		
+        // Function to handle the counter animation
+        function startCounterAnimation(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('[data-target]');
+                    counters.forEach(counter => {
+                        const updateCount = () => {
+                            const target = +counter.getAttribute('data-target');
+                            const count = +counter.innerText;
+                            const speed = 200; // The higher the number, the slower the animation
+                            const increment = target / speed;
 
-                    if (count < target) {
-                        counter.innerText = Math.ceil(count + increment);
-                        setTimeout(updateCount, 1);
-                    } else {
-                        counter.innerText = target;
-                    }
-                };
-                updateCount();
+                            if (count < target) {
+                                counter.innerText = Math.ceil(count + increment);
+                                setTimeout(updateCount, 1);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCount();
+                    });
+                    observer.unobserve(entry.target); // Stop observing after animation starts
+                }
             });
-            observer.unobserve(entry.target); // Stop observing after animation starts
         }
-    });
-}
 
-// Create a new IntersectionObserver for the counter section
-const counterObserver = new IntersectionObserver(startCounterAnimation, {
-    threshold: 0.5 // Trigger when 50% of the section is visible
-});
+        // Create a new IntersectionObserver for the counter section
+        const counterObserver = new IntersectionObserver(startCounterAnimation, {
+            threshold: 0.5 // Trigger when 50% of the section is visible
+        });
 
-// Observe the counter section
-document.addEventListener('DOMContentLoaded', () => {
-    const counterSection = document.getElementById('counter');
-    if (counterSection) {
-        counterObserver.observe(counterSection);
-    }
-});
+        // Observe the counter section
+        document.addEventListener('DOMContentLoaded', () => {
+            const counterSection = document.getElementById('counter');
+            if (counterSection) {
+                counterObserver.observe(counterSection);
+            }
+            
+            // Team Carousel JavaScript with Auto-play and Swiping
+            const carouselContainer = document.getElementById('carousel-container');
+            const carouselWrapper = document.getElementById('carousel-wrapper');
+            const prevButton = document.getElementById('prev-btn');
+            const nextButton = document.getElementById('next-btn');
+            const totalItems = carouselWrapper.children.length;
+            
+            let currentIndex = 0;
+            let isDragging = false;
+            let startPos = 0;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
+            let animationID;
+            let autoPlayInterval;
+
+            // Function to update the carousel position
+            function updateCarousel() {
+                // Ensure currentIndex wraps around for a continuous loop
+                if (currentIndex >= totalItems) {
+                    currentIndex = 0;
+                } else if (currentIndex < 0) {
+                    currentIndex = totalItems - 1;
+                }
+                const itemWidth = carouselWrapper.querySelector('.carousel-item').offsetWidth;
+                currentTranslate = -currentIndex * itemWidth;
+                setTransform(currentTranslate, true);
+            }
+
+            // Function to set the transform property with a transition
+            function setTransform(translate, withTransition) {
+                if (withTransition) {
+                    carouselWrapper.style.transition = 'transform 0.5s ease-in-out';
+                } else {
+                    carouselWrapper.style.transition = 'none';
+                }
+                carouselWrapper.style.transform = `translateX(${translate}px)`;
+            }
+
+            // --- Auto-play functionality ---
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(() => {
+                    currentIndex++;
+                    updateCarousel();
+                }, 4000); // Change slide every 4 seconds
+            }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayInterval);
+            }
+            
+            // Start auto-play when the page loads
+            startAutoPlay();
+
+            // Pause auto-play on hover
+            carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+            carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+            // --- Dragging functionality (Mouse & Touch) ---
+            
+            // Start drag
+            function startDrag(e) {
+                isDragging = true;
+                // Get the starting position for both mouse and touch
+                startPos = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                prevTranslate = currentTranslate;
+                stopAutoPlay();
+                // Use requestAnimationFrame for smooth dragging
+                animationID = requestAnimationFrame(animation);
+            }
+
+            // Drag
+            function drag(e) {
+                if (!isDragging) return;
+                // Get the current position
+                const currentPosition = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                const movedBy = currentPosition - startPos;
+                currentTranslate = prevTranslate + movedBy;
+            }
+
+            // End drag
+            function endDrag() {
+                isDragging = false;
+                cancelAnimationFrame(animationID);
+                
+                const movedBy = currentTranslate - prevTranslate;
+                const itemWidth = carouselWrapper.querySelector('.carousel-item').offsetWidth;
+                const threshold = itemWidth / 4; // Slide if dragged more than 25% of the item width
+
+                // Snap to the next or previous item based on drag direction
+                if (movedBy < -threshold) {
+                    currentIndex++;
+                } else if (movedBy > threshold) {
+                    currentIndex--;
+                }
+                
+                updateCarousel();
+                startAutoPlay();
+            }
+
+            // Animation loop for smooth dragging
+            function animation() {
+                setTransform(currentTranslate, false);
+                if (isDragging) {
+                    requestAnimationFrame(animation);
+                }
+            }
+
+            // Add event listeners for mouse and touch
+            carouselContainer.addEventListener('mousedown', startDrag);
+            carouselContainer.addEventListener('mouseup', endDrag);
+            carouselContainer.addEventListener('mouseleave', endDrag); // Ends drag if mouse leaves container
+            carouselContainer.addEventListener('mousemove', drag);
+
+            carouselContainer.addEventListener('touchstart', (e) => startDrag(e));
+            carouselContainer.addEventListener('touchend', endDrag);
+            carouselContainer.addEventListener('touchmove', (e) => drag(e));
+            
+            // Add click listeners to buttons (still a good fallback)
+            nextButton.addEventListener('click', () => {
+                currentIndex++;
+                updateCarousel();
+            });
+
+            prevButton.addEventListener('click', () => {
+                currentIndex--;
+                updateCarousel();
+            });
+
+            // Update carousel on window resize to maintain responsive behavior
+            window.addEventListener('resize', () => {
+                updateCarousel();
+            });
+        });
+
     </script>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -379,6 +561,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         </section>
+        <!-- Meet The Team Section -->
+        <section id="team" class="py-20 scroll-mt-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-12">Meet Our Team</h2>
+
+                <div id="carousel-container" class="carousel-container max-w-6xl mx-auto relative">
+                    <div id="carousel-wrapper" class="carousel-wrapper">
+                        <!-- Team Member 1 -->
+                        <div class="carousel-item p-4">
+                            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2 text-center p-6">
+                                <img src="eddy.jpg" alt="Ssemirimu Edgar" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover border-4 border-accent-cyan">
+                                <h3 class="text-2xl font-semibold text-primary-blue">Ssemirimu Edgar</h3>
+                                <p class="text-lg text-accent-cyan mb-2">CEO</p>
+                                <p class="text-sm text-gray-600">Visionary leader driving the company's growth and strategy.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Team Member 2 -->
+                        <div class="carousel-item p-4">
+                            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2 text-center p-6">
+                                <img src="timo.jpg" alt="Olemukana Gilbert" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover border-4 border-accent-cyan">
+                                <h3 class="text-2xl font-semibold text-primary-blue">Okolimong Timothy</h3>
+                                <p class="text-lg text-accent-cyan mb-2">Head of Technical Team</p>
+                                <p class="text-sm text-gray-600">Leads our skilled technical team to deliver top-notch solutions.</p>
+                            </div>
+                        </div>
+
+                        <!-- Team Member 3 -->
+                        <div class="carousel-item p-4">
+                            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2 text-center p-6">
+                                <img src="anzo.jpg" alt="Mine Gift" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover border-4 border-accent-cyan">
+                                <h3 class="text-2xl font-semibold text-primary-blue">Anzoleto Ignatius</h3>
+                                <p class="text-lg text-accent-cyan mb-2">Head of Graphics Team</p>
+                                <p class="text-sm text-gray-600">Oversees creative design to craft powerful visual identities.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Team Member 4 -->
+                        <div class="carousel-item p-4">
+                            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2 text-center p-6">
+                                <img src="precy.jpg" alt="Nambuuya Precious" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover border-4 border-accent-cyan">
+                                <h3 class="text-2xl font-semibold text-primary-blue">Nambuuya Precious</h3>
+                                <p class="text-lg text-accent-cyan mb-2">Head of Accounts</p>
+                                <p class="text-sm text-gray-600">Manages our financial operations with precision and integrity.</p>
+                            </div>
+                        </div>
+
+                        <!-- Team Member 5 -->
+                        <div class="carousel-item p-4">
+                            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2 text-center p-6">
+                                <img src="sales.png" alt="Mugere Paul" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover border-4 border-accent-cyan">
+                                <h3 class="text-2xl font-semibold text-primary-blue">Mugere Paul</h3>
+                                <p class="text-lg text-accent-cyan mb-2">Head of Sales</p>
+                                <p class="text-sm text-gray-600">Drives sales initiatives and builds strong client relationships.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <!-- Carousel Controls -->
+                    <button id="prev-btn" class="carousel-control carousel-prev text-2xl px-4 py-2"><i class="fas fa-chevron-left"></i></button>
+                    <button id="next-btn" class="carousel-control carousel-next text-2xl px-4 py-2"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
 
 <section id="faq" class="py-20">
     <div class="container mx-auto px-4">
@@ -447,58 +694,124 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>
 </section>
-<section id="reviews" class="py-20 bg-gray-100 scroll-mt-24">
-    <div class="container mx-auto px-4">
-        <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">What Our Clients Say</h2>
-        <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Hear from our satisfied customers about their experience with us.</p>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto animate-on-scroll">
+       <section id="pricing" class="py-20 bg-white scroll-mt-24">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold text-primary-blue mb-4">Our Flexible Pricing Plans</h2>
+                <p class="text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Choose the plan that's right for you. We have options for every budget and every need.</p>
 
-            <div class="bg-white p-8 rounded-3xl shadow-lg transition duration-300 hover:shadow-xl">
-                <div class="flex items-center mb-4">
-                    <div class="flex text-yellow-400 text-lg">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
+                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto animate-on-scroll relative">
+                    <!-- Pricing Card 1 -->
+                    <div class="bg-gray-100 p-10 rounded-3xl shadow-lg border-2 border-transparent hover:border-accent-cyan transition duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-3xl font-bold text-primary-blue mb-2">Basic</h3>
+                        <p class="text-lg text-gray-600 mb-4">Great for small projects</p>
+                        <div class="text-5xl font-extrabold text-accent-cyan mb-6">UGX 150,000<span class="text-2xl text-gray-500">/ per project</span></div>
+                        <ul class="space-y-3 text-left text-gray-700 mb-8">
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Single Design Concept</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>1-on-1 Consultation</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Standard Tech Support</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>5-Day Delivery</li>
+                        </ul>
+                        <a href="#contact" class="bg-primary-blue text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-accent-cyan hover:text-primary-blue transition duration-300">Choose Plan</a>
+                    </div>
+
+                    <!-- Pricing Card 2 (Featured) -->
+                    <div class="bg-primary-blue text-white p-10 rounded-3xl shadow-2xl scale-105 transform hover:scale-110 transition duration-500 z-10">
+                        <div class="bg-accent-cyan text-primary-blue text-xs font-bold uppercase rounded-full px-4 py-1 inline-block mb-4">Most Popular</div>
+                        <h3 class="text-3xl font-bold mb-2">Pro</h3>
+                        <p class="text-lg text-gray-300 mb-4">Perfect for growing businesses</p>
+                        <div class="text-5xl font-extrabold text-accent-cyan mb-6">UGX 300,000<span class="text-2xl text-gray-300">/ per project</span></div>
+                        <ul class="space-y-3 text-left mb-8">
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>3 Design Concepts</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Unlimited Revisions</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Priority Tech Support</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>3-Day Delivery</li>
+                        </ul>
+                        <a href="#contact" class="bg-accent-cyan text-primary-blue font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300">Choose Plan</a>
+                    </div>
+
+                    <!-- Pricing Card 3 -->
+                    <div class="bg-gray-100 p-10 rounded-3xl shadow-lg border-2 border-transparent hover:border-accent-cyan transition duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-3xl font-bold text-primary-blue mb-2">Enterprise</h3>
+                        <p class="text-lg text-gray-600 mb-4">For large-scale solutions</p>
+                        <div class="text-5xl font-extrabold text-accent-cyan mb-6">Custom</div>
+                        <ul class="space-y-3 text-left text-gray-700 mb-8">
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Dedicated Team</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Custom Solutions</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>24/7 Premium Support</li>
+                            <li><i class="fas fa-check-circle text-accent-cyan mr-2"></i>Expedited Delivery</li>
+                        </ul>
+                        <a href="#contact" class="bg-primary-blue text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-accent-cyan hover:text-primary-blue transition duration-300">Choose Plan</a>
                     </div>
                 </div>
-                <p class="text-gray-700 leading-relaxed mb-4 italic">"Greco Tech and Grafix fixed my laptop quickly and at a great price. The service was professional and the staff was very knowledgeable. Highly recommend their tech services!"</p>
-                <p class="font-bold text-primary-blue">- Asiimwe Sandra in Hoima</p>
             </div>
+        </section>
+<section id="testimonials" class="py-20 bg-gray-100 scroll-mt-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-12">What Our Clients Say</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll max-w-6xl mx-auto">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-white p-8 rounded-3xl shadow-lg relative transition duration-300 hover:shadow-xl transform hover:-translate-y-2">
+                        <div class="absolute top-4 left-4 text-accent-cyan text-4xl opacity-20 transform -scale-x-100"><i class="fas fa-quote-right"></i></div>
+                        <div class="flex items-center mb-4">
+                            <img src="kaki.jpg" alt="Client Jane Doe" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-accent-cyan">
+                            <div>
+                                <h3 class="font-bold text-primary-blue text-xl">Nayiga Jackline</h3>
+                                <p class="text-sm text-gray-500">Marketer, Tech Innovators</p>
+                                <div class="flex text-yellow-400 mt-1">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic">"Greco Tech and Grafix Solutions saved our project with their fast and professional tech support. The team is knowledgeable and their service is unparalleled. Highly recommend!"</p>
+                    </div>
 
-            <div class="bg-white p-8 rounded-3xl shadow-lg transition duration-300 hover:shadow-xl">
-                <div class="flex items-center mb-4">
-                    <div class="flex text-yellow-400 text-lg">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
+                    <!-- Testimonial 2 -->
+                    <div class="bg-white p-8 rounded-3xl shadow-lg relative transition duration-300 hover:shadow-xl transform hover:-translate-y-2">
+                        <div class="absolute top-4 left-4 text-accent-cyan text-4xl opacity-20 transform -scale-x-100"><i class="fas fa-quote-right"></i></div>
+                        <div class="flex items-center mb-4">
+                            <img src="kwasi.jpg" alt="Client John Smith" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-accent-cyan">
+                            <div>
+                                <h3 class="font-bold text-primary-blue text-xl">Kangave Elvis</h3>
+                                <p class="text-sm text-gray-500">Founder, Creative Ventures</p>
+                                <div class="flex text-yellow-400 mt-1">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic">"The graphic design team exceeded my expectations. They captured my brand's essence perfectly and delivered a stunning logo and branding kit. A truly collaborative and creative experience."</p>
+                    </div>
+                    
+                    <!-- Testimonial 3 -->
+                    <div class="bg-white p-8 rounded-3xl shadow-lg relative transition duration-300 hover:shadow-xl transform hover:-translate-y-2">
+                        <div class="absolute top-4 left-4 text-accent-cyan text-4xl opacity-20 transform -scale-x-100"><i class="fas fa-quote-right"></i></div>
+                        <div class="flex items-center mb-4">
+                            <img src="vane.jpg" alt="Client Sara Miller" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-accent-cyan">
+                            <div>
+                                <h3 class="font-bold text-primary-blue text-xl">Nalukwago Vanessa</h3>
+                                <p class="text-sm text-gray-500">Marketing Director</p>
+                                <div class="flex text-yellow-400 mt-1">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic">"I'm so impressed with the level of detail and professionalism. From my website design to my business cards, Greco Solutions provided a cohesive and polished look that has significantly boosted my business."</p>
                     </div>
                 </div>
-                <p class="text-gray-700 leading-relaxed mb-4 italic">"I worked with them on a logo for my new business. They captured my vision perfectly and delivered a stunning design that has already received so many compliments. Their creative team is amazing."</p>
-                <p class="font-bold text-primary-blue">- Ochola Peter in Jinja</p>
             </div>
-
-            <div class="bg-white p-8 rounded-3xl shadow-lg transition duration-300 hover:shadow-xl">
-                <div class="flex items-center mb-4">
-                    <div class="flex text-yellow-400 text-lg">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                <p class="text-gray-700 leading-relaxed mb-4 italic">"The CCTV installation service was seamless. The team was fast, efficient, and the system works flawlessly. I feel much safer knowing my property is secured. Thank you, Greco!"</p>
-                <p class="font-bold text-primary-blue">- Matovu Shadrack in Entebbe</p>
-            </div>
-            
-        </div>
-    </div>
-</section>
+        </section>
     <section id="contact" class="py-20 bg-gray-100 scroll-mt-24">
             <div class="container mx-auto px-4">
                 <h2 class="text-4xl md:text-5xl font-bold text-primary-blue text-center mb-4">Get In Touch</h2>
@@ -550,30 +863,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     </main>
 
-    <footer class="bg-primary-blue text-white py-12">
+     <footer class="bg-primary-blue text-white py-12">
         <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="col-span-2">
-                    <img src="Asset 1@300x.png" alt="Greco Tech and Grafix Solutions Logo" class="h-10 mb-4">
-                    <p class="text-gray-300 pr-8">Greco Tech and Grafix Solutions is your one-stop shop for reliable tech services and creative graphic design, helping you build a stronger presence.</p>
+            <div class="flex flex-col lg:flex-row items-center lg:items-start justify-between">
+                <div class="text-center lg:text-left mb-8 lg:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Greco Tech and Grafix Solutions</h3>
+                    <p class="text-gray-400 max-w-md">Your trusted partner for all things tech and graphic design. We combine innovation with creativity to deliver outstanding results.</p>
                 </div>
-                <div>
+                 <div>
                     <h4 class="text-xl font-bold mb-4">Quick Links</h4>
                     <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-300 hover:text-accent-cyan transition duration-300">Home</a></li>
-                        <li><a href="#tech-solutions" class="text-gray-300 hover:text-accent-cyan transition duration-300">Tech Solutions</a></li>
-                        <li><a href="#graphic-design" class="text-gray-300 hover:text-accent-cyan transition duration-300">Graphic Design</a></li>
+                        <li><a href="index.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Home</a></li>
+                        <li><a href="index.html#tech-solutions" class="text-gray-300 hover:text-accent-cyan transition duration-300">Tech Solutions</a></li>
+                        <li><a href="index.html#graphic-design" class="text-gray-300 hover:text-accent-cyan transition duration-300">Graphic Design</a></li>
                         <li><a href="gallery.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Gallery</a></li>
-                        <li><a href="#about" class="text-gray-300 hover:text-accent-cyan transition duration-300">About Us</a></li>
-                        <li><a href="#contact" class="text-gray-300 hover:text-accent-cyan transition duration-300">Contact</a></li>
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-accent-cyan transition duration-300">About Us</a></li>
+                        <li><a href="index.html#contact" class="text-gray-300 hover:text-accent-cyan transition duration-300">Contact</a></li>
+						<li><a href="donate.html" class="text-gray-300 hover:text-accent-cyan transition duration-300">Donate</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="text-xl font-bold mb-4">Contact Info</h4>
-                    <p class="text-gray-300 mb-2"><i class="fas fa-phone-alt mr-2 text-accent-cyan"></i>+256 780 130 561</p>
-                    <p class="text-gray-300 mb-2"><i class="fas fa-envelope mr-2 text-accent-cyan"></i>grecotech&graphix@gmail.com</p>
-                    <p class="text-gray-300 mb-4"><i class="fas fa-map-marker-alt mr-2 text-accent-cyan"></i>Buziga Kampala, Uganda</p>
-                    <div class="flex space-x-4">
+                <div class="text-center lg:text-left">
+                    <h4 class="text-lg font-semibold mb-2">Contact Info</h4>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-phone-alt mr-2 text-accent-cyan"></i>+256 708 761 234</p>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-envelope mr-2 text-accent-cyan"></i>info@grecotech.com</p>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-map-marker-alt mr-2 text-accent-cyan"></i>Buziga Kampala, Uganda</p>
+                    <div class="flex space-x-4 justify-center lg:justify-start">
                         <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="text-gray-300 hover:text-accent-cyan transition duration-300"><i class="fab fa-telegram"></i></a>
@@ -584,7 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
-                <p>&copy; 2024 Greco Tech and Grafix Solutions. All Rights Reserved.</p>
+                <p>&copy; 2025  Greco Tech and Grafix Solutions. All Rights Reserved.</p>
 				<div class="bg-gradient-to-r from-primary-blue to-accent-cyan text-white p-2 mt-4 rounded-lg inline-block">
                 <p class="text-sm font-semibold">ISO 9001:2015 Certified | NHBRC Registered</p>
             </div>
@@ -592,4 +906,4 @@ document.addEventListener('DOMContentLoaded', () => {
     </footer>
 
 </body>
-</html>
+	</html>
